@@ -21,34 +21,131 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
 
     public TelaCadastroUsuario() {
         initComponents();
-        
+
         conexao = ModuloConexao.conector();
 
     }
-    
-    private void consultar(int valor){
-    String sql = "select * from tbusuarios where iduser=?";
+    //Metodo para consutar usuarios.     
+
+    private void consultar(int valor) {
+        String sql = "select * from tbusuarios where iduser=?";
         try {
             pst = conexao.prepareStatement(sql);
-            pst.setInt(1,valor);
-            rs=pst.executeQuery();
+            pst.setInt(1, valor);
+            rs = pst.executeQuery();
             if (rs.next()) {
                 //inseri o valor das consulta no campos do formulario.
-              txtUsuId.setText(rs.getString(1));
-              txtUsuNome.setText(rs.getString(2));
-              txtUsuFone.setText(rs.getString(3));
-              txtUsuLogin.setText(rs.getString(4));
-              txtUsuSenha.setText(rs.getString(5));
-              //linha a baixo se refere a combobox
-              cboUsuPerfil.setSelectedItem(rs.getString(6));
+                txtUsuId.setText(rs.getString(1));
+                txtUsuNome.setText(rs.getString(2));
+                txtUsuFone.setText(rs.getString(3));
+                txtUsuLogin.setText(rs.getString(4));
+                txtUsuSenha.setText(rs.getString(5));
+                //linha a baixo se refere a combobox
+                cboUsuPerfil.setSelectedItem(rs.getString(6));
             } else {
                 JOptionPane.showMessageDialog(rootPane, "Não foi achado esses dados no sistema", "Não econtrado", JOptionPane.ERROR_MESSAGE, null);
+                //linha abaixo limpa os campos
+                limparCampos();
+
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
+
+    }
+
+    private void adcionar() {
+        String sql = "insert into tbusuarios(iduser,usuario,fone,login,senha,perfil)values(?,?,?,?,?,?)";
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1, txtUsuId.getText());
+            pst.setString(2, txtUsuNome.getText());
+            pst.setString(3, txtUsuFone.getText());
+            pst.setString(4, txtUsuLogin.getText());
+            pst.setString(5, txtUsuSenha.getText());
+            pst.setString(6, cboUsuPerfil.getSelectedItem().toString());
+            if (txtUsuId.getText().isEmpty() || txtUsuNome.getText().isEmpty() || txtUsuLogin.getText().isEmpty() || txtUsuSenha.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Preecher todos campos com com *");
+            } else {
+
+                int adcionado = pst.executeUpdate();
+                if (adcionado > 0) {
+                    JOptionPane.showMessageDialog(null, "Cadastrado com sucesso!");
+                    limparCampos();
+
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+
+    }
+
+    private void alterar() {
+        String Sql = " update tbusuarios set usuario=? , fone=? ,login=? ,senha=?,perfil=? where iduser=? ";
+
+        try {
+
+            pst = conexao.prepareStatement(Sql);
+            pst.setString(1, txtUsuNome.getText());
+            pst.setString(2, txtUsuFone.getText());
+            pst.setString(3, txtUsuLogin.getText());
+            pst.setString(4, txtUsuSenha.getText());
+            pst.setString(5, cboUsuPerfil.getSelectedItem().toString());
+            pst.setString(6, txtUsuId.getText());
+            if (txtUsuId.getText().isEmpty() || txtUsuNome.getText().isEmpty() || txtUsuLogin.getText().isEmpty() || txtUsuSenha.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "algum campo em branco, porfavor preecher!*");
+            } else {
+                int adcionado = pst.executeUpdate();
+                if (adcionado > 0) {
+                    JOptionPane.showMessageDialog(null, "Alterado os dados com sucesso!");
+                    limparCampos();
+
+                }
+
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+
+        }
+
+    }
+
+    private void excluir() {
+
+        String sql = "DELETE FROM tbusuarios where iduser=?";
+
+        try {
+
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1, txtUsuId.getText());
+            if (txtUsuId.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Campo *ID não esta preechido !!!*");
+            } else {
+                int adcionado = pst.executeUpdate();
+                if (adcionado > 0) {
+                    JOptionPane.showMessageDialog(null, "usuario ID:"+txtUsuId.getText()+"excluido com sucesso !");
+                    limparCampos();
+
+                }
+            }
+            }catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+            
+        }
+
+        }
+
     
-    
+
+    private void limparCampos() {
+        txtUsuId.setText(null);
+        txtUsuNome.setText(null);
+        txtUsuFone.setText(null);
+        txtUsuLogin.setText(null);
+        txtUsuSenha.setText(null);
+        cboUsuPerfil.setSelectedItem(null);
+
     }
 
     /**
@@ -94,16 +191,16 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel1.setText("ID:");
+        jLabel1.setText("*ID:");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel2.setText("Nome :");
+        jLabel2.setText("*Nome :");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel3.setText("Login :");
+        jLabel3.setText("*Login :");
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel4.setText("Senha :");
+        jLabel4.setText("*Senha :");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Fone :");
@@ -117,6 +214,11 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
 
         btnusucadastro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/os/icones/botao_inserir.png"))); // NOI18N
         btnusucadastro.setToolTipText("Cadastrar");
+        btnusucadastro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnusucadastroActionPerformed(evt);
+            }
+        });
 
         btnusubusca.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/os/icones/botao_buscar.png"))); // NOI18N
         btnusubusca.setToolTipText("Buscar");
@@ -128,9 +230,19 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
 
         btnusueditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/os/icones/botao_editar.png"))); // NOI18N
         btnusueditar.setToolTipText("Editar");
+        btnusueditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnusueditarActionPerformed(evt);
+            }
+        });
 
         btnusuexcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/os/icones/botao_remover.png"))); // NOI18N
         btnusuexcluir.setToolTipText("Excluir");
+        btnusuexcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnusuexcluirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -151,11 +263,11 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(24, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnusucadastro)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnusueditar, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnusuexcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnusubusca, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnusubusca, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnusucadastro))
                 .addGap(21, 21, 21))
         );
 
@@ -241,10 +353,28 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_txtUsuNomeActionPerformed
 
     private void btnusubuscaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnusubuscaActionPerformed
-        int valor=0;
-        valor=Integer.parseInt(JOptionPane.showInputDialog("Digite o ID para relizar a busca !"));
+        int valor = 0;
+        valor = Integer.parseInt(JOptionPane.showInputDialog("Digite o ID para relizar a busca !"));
         consultar(valor);
     }//GEN-LAST:event_btnusubuscaActionPerformed
+
+    private void btnusucadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnusucadastroActionPerformed
+        adcionar();
+    }//GEN-LAST:event_btnusucadastroActionPerformed
+
+    private void btnusueditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnusueditarActionPerformed
+
+        alterar();
+    }//GEN-LAST:event_btnusueditarActionPerformed
+
+    private void btnusuexcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnusuexcluirActionPerformed
+        int confirmar = JOptionPane.showConfirmDialog(null,"Tem Certeza que deseja excluir","Excluir Item",JOptionPane.YES_OPTION);
+         if(confirmar==JOptionPane.YES_OPTION){
+         excluir();
+         }
+        
+        
+    }//GEN-LAST:event_btnusuexcluirActionPerformed
 
     /**
      * @param args the command line arguments

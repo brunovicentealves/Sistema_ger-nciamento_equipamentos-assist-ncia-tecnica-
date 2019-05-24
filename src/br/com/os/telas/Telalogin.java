@@ -40,7 +40,7 @@ public class Telalogin extends javax.swing.JFrame {
                 String perfil = rs.getString(6);
                 String usuario = rs.getString(2);
                 //se o usuario for admin ele ativa os botoes na telaPrincipal.
-                if (perfil.equals("admin")) {
+                if (perfil.equals("Admin")) {
                     
                     TelaPrincipal principal = new TelaPrincipal();
                     principal.setVisible(true);
