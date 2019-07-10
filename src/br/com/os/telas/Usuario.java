@@ -13,20 +13,20 @@ import javax.swing.JOptionPane;
  *
  * @author bruno.alves
  */
-public class TelaCadastroUsuario extends javax.swing.JFrame {
+public class Usuario extends javax.swing.JFrame {
 
     Connection conexao = null;
     PreparedStatement pst = null;
     ResultSet rs = null;
 
-    public TelaCadastroUsuario() {
+    public Usuario() {
         initComponents();
 
         conexao = ModuloConexao.conector();
 
     }
-    //Metodo para consutar usuarios.     
 
+    //Função para consutar usuarios.     
     private void consultar(int valor) {
         String sql = "select * from tbusuarios where iduser=?";
         try {
@@ -53,8 +53,8 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         }
 
     }
-
-    private void adcionar() {
+    //Funçao para cadastrar Usuarios
+    private void cadastrarUsuario() {
         String sql = "insert into tbusuarios(iduser,usuario,fone,login,senha,perfil)values(?,?,?,?,?,?)";
         try {
             pst = conexao.prepareStatement(sql);
@@ -80,8 +80,8 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         }
 
     }
-
-    private void alterar() {
+    // Função para Alterar dados de um usuario .
+    private void alterarUsuario() {
         String Sql = " update tbusuarios set usuario=? , fone=? ,login=? ,senha=?,perfil=? where iduser=? ";
 
         try {
@@ -110,11 +110,9 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         }
 
     }
-
-    private void excluir() {
-
+    //Função para excluirUsuario Usuario.
+    private void excluirUsuario() {
         String sql = "DELETE FROM tbusuarios where iduser=?";
-
         try {
 
             pst = conexao.prepareStatement(sql);
@@ -124,19 +122,17 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
             } else {
                 int adcionado = pst.executeUpdate();
                 if (adcionado > 0) {
-                    JOptionPane.showMessageDialog(null, "usuario ID:"+txtUsuId.getText()+"excluido com sucesso !");
+                    JOptionPane.showMessageDialog(null, "usuario ID:" + txtUsuId.getText() + "excluido com sucesso !");
                     limparCampos();
 
                 }
             }
-            }catch (Exception e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
-            
-        }
 
         }
 
-    
+    }
 
     private void limparCampos() {
         txtUsuId.setText(null);
@@ -261,14 +257,18 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap(24, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnusueditar, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnusuexcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnusubusca, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnusucadastro))
-                .addGap(21, 21, 21))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnusueditar, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnusuexcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnusubusca, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(21, 21, 21))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnusucadastro)
+                        .addContainerGap())))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -359,21 +359,21 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnusubuscaActionPerformed
 
     private void btnusucadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnusucadastroActionPerformed
-        adcionar();
+        cadastrarUsuario();
     }//GEN-LAST:event_btnusucadastroActionPerformed
 
     private void btnusueditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnusueditarActionPerformed
 
-        alterar();
+        alterarUsuario();
     }//GEN-LAST:event_btnusueditarActionPerformed
 
     private void btnusuexcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnusuexcluirActionPerformed
-        int confirmar = JOptionPane.showConfirmDialog(null,"Tem Certeza que deseja excluir","Excluir Item",JOptionPane.YES_OPTION);
-         if(confirmar==JOptionPane.YES_OPTION){
-         excluir();
-         }
-        
-        
+        int confirmar = JOptionPane.showConfirmDialog(null, "Tem Certeza que deseja excluir", "Excluir Item", JOptionPane.YES_OPTION);
+        if (confirmar == JOptionPane.YES_OPTION) {
+            excluirUsuario();
+        }
+
+
     }//GEN-LAST:event_btnusuexcluirActionPerformed
 
     /**
@@ -393,20 +393,21 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastroUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Usuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastroUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Usuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastroUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Usuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastroUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Usuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TelaCadastroUsuario().setVisible(true);
+                new Usuario().setVisible(true);
             }
         });
     }

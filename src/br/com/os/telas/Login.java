@@ -16,14 +16,14 @@ import javax.swing.JOptionPane;
  *
  * @author bruno.alves
  */
-public class Telalogin extends javax.swing.JFrame {
+public class Login extends javax.swing.JFrame {
 
     //conexao com o banco 
     Connection conexao = null;
     //biblioteca para manipular informações no banco 
     PreparedStatement pst = null;
     ResultSet rs = null;
-
+    //verifica se o usuario esta cadastrado no sistema para entrar no sistema .
     public void logar() {
         String sql = "select * from tbusuarios where login=? and senha=?";
         try {
@@ -67,7 +67,7 @@ public class Telalogin extends javax.swing.JFrame {
     /**
      * Creates new form Telalogin1
      */
-    public Telalogin() {
+    public Login() {
         initComponents();
 
         conexao = ModuloConexao.conector();
@@ -77,6 +77,7 @@ public class Telalogin extends javax.swing.JFrame {
         } else {
             lblstatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/os/icones/dberror.png")));
         }
+        
     }
 
     /**
@@ -210,21 +211,23 @@ public class Telalogin extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Telalogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Telalogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Telalogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Telalogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Telalogin().setVisible(true);
+                new Login().setVisible(true);
             }
         });
     }
