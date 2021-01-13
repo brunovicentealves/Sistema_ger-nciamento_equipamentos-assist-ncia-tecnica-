@@ -1,4 +1,4 @@
-## sistema para Gerenciamento de OS de  assistência Tecnica  🔧 📺 📻 💻
+## Sistema para Gerenciamento de OS de  assistência Tecnica  🔧 📺 📻 💻
 
 ### Desenvolvido para usar em assistências que arrumam eletro-eletronico 
 
